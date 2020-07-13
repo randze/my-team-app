@@ -1,14 +1,14 @@
-const Manager = require("./lib/Manager");
-const Engineer = require("./lib/Engineer");
-const Intern = require("./lib/Intern");
-const inquirer = require("inquirer");
-const path = require("path");
-const fs = require("fs");
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
+const inquirer = require('inquirer');
+const path = require('path');
+const fs = require('fs');
 
-const OUTPUT_DIR = path.resolve(__dirname, "output");
-const outputPath = path.join(OUTPUT_DIR, "team.html");
+const OUTPUT_DIR = path.resolve(__dirname, 'output');
+const outputPath = path.join(OUTPUT_DIR, 'team.html');
 
-const render = require("./lib/htmlRenderer");
+const render = require('./lib/htmlRenderer');
 
 
 // Write code to use inquirer to gather information about the development team members,
@@ -33,3 +33,39 @@ const render = require("./lib/htmlRenderer");
 // for further information. Be sure to test out each class and verify it generates an
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
+
+let addTeam = true
+let id = 1
+
+const managerQuestions = [
+    {
+        name: 'name',
+        type: 'input',
+        message: 'What is the manager\'s name?\n'
+    },
+    {
+        name: 'email',
+        type: 'input',
+        message: 'What is the manager\'s e-mail?\n'
+    },
+    {
+        name: 'officeNum',
+        type: 'input',
+        message: 'What is the manager\'s office number?\n'
+    }
+]
+
+async function mainApp() {
+    let team = []
+
+    const managerData = await inquirer.prompt(managerQuestions)
+    team.push(new Manager(managerData.name, id, managerData.email, managerData.officeNum))
+
+    do {
+        // code block to be executed
+    } while (addTeam === true)
+}
+
+async function addMember() {
+
+}
