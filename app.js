@@ -55,17 +55,69 @@ const managerQuestions = [
     }
 ]
 
+const memberQuestions = [
+    {
+        name: 'name',
+        type: 'input',
+        message: 'What is the team member\'s name?\n'
+    },
+    {
+        name: 'email',
+        type: 'input',
+        message: 'What is the team member\'s e-mail?\n'
+    },
+    {
+        name: 'github',
+        type: 'input',
+        message: 'What is the engineer\'s GitHub user name?\n',
+        when: answers => answers.action === 'Add Engineer'
+    },
+    {
+        name: 'school',
+        type: 'input',
+        message: 'What is the intern\'s school?\n',
+        when: answers => answers.action === 'Add Intern'
+    }
+]
+
 async function mainApp() {
     let team = []
 
     const managerData = await inquirer.prompt(managerQuestions)
     team.push(new Manager(managerData.name, id, managerData.email, managerData.officeNum))
-
+    id++
     do {
-        // code block to be executed
+        addMember()
+        id++
     } while (addTeam === true)
 }
 
 async function addMember() {
+    await inquirer.prompt(
+        [{
+            name: 'action',
+            type: 'list',
+            message: 'What would you like to do?\n',
+            choices: ['Add Engineer', 'Add Intern', 'Done'],
+        }]
+    )
+    .then(answers){
+        if (answers.action === 'Done') {
+            return addTeam = false
+        }
+        else {
+            const response = await inquirer.prompt(memberQuestions)
 
+            switch (answers.action) {
+                case 'Add Engineer':
+                    team.push(new Engineer(response.name, id, response.email, response.github))
+                    break
+                case 'Add Intern':
+                    team.push(new Intern(response.name, id, response.email, response.school))
+                    break
+            }
+        }
+    }
 }
+
+mainApp()
