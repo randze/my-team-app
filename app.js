@@ -33,10 +33,23 @@ const render = require('./lib/htmlRenderer');
 // for further information. Be sure to test out each class and verify it generates an
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
+console.clear()
+console.log(`
+                 _                                               
+ _ __ ___  _   _| |_ ___  __ _ _ __ ___        __ _ _ __  _ __  
+| '_ \` _ \\| | | | __/ _ \\/ _\` | '_ \` _ \\ ____ / _\` | '_ \\| '_ \\ 
+| | | | | | |_| | ||  __/ (_| | | | | | |____| (_| | |_) | |_) |
+|_| |_| |_|\\__, |\\__\\___|\\__,_|_| |_| |_|     \\__,_| .__/| .__/ 
+           |___/                                   |_|   |_|    
 
+`
+)
+
+// global variables
 let addTeam = true
 let id = 1
-
+let team = []
+// manager questions
 const managerQuestions = [
     {
         name: 'name',
@@ -54,17 +67,25 @@ const managerQuestions = [
         message: 'What is the manager\'s office number?\n'
     }
 ]
-
+// add member questions
 const memberQuestions = [
+    {
+        name: 'action',
+        type: 'list',
+        message: 'What would you like to do?\n',
+        choices: ['Add Engineer', 'Add Intern', 'Done'],
+    },
     {
         name: 'name',
         type: 'input',
-        message: 'What is the team member\'s name?\n'
+        message: 'What is the team member\'s name?\n',
+        when: answers => answers.action !== 'Done'
     },
     {
         name: 'email',
         type: 'input',
-        message: 'What is the team member\'s e-mail?\n'
+        message: 'What is the team member\'s e-mail?\n',
+        when: answers => answers.action !== 'Done'
     },
     {
         name: 'github',
@@ -79,45 +100,46 @@ const memberQuestions = [
         when: answers => answers.action === 'Add Intern'
     }
 ]
-
+// main function of the app
 async function mainApp() {
-    let team = []
-
+    // add manager first
     const managerData = await inquirer.prompt(managerQuestions)
     team.push(new Manager(managerData.name, id, managerData.email, managerData.officeNum))
     id++
+
+    // loop to continue to add members
     do {
-        addMember()
+        await addMember()
         id++
     } while (addTeam === true)
+
+    // test console log
+    console.log(team)
+
+    //render team html
+    const html = render(team)
+    fs.writeFileSync(outputPath, html)
 }
 
+// function to add members
 async function addMember() {
-    await inquirer.prompt(
-        [{
-            name: 'action',
-            type: 'list',
-            message: 'What would you like to do?\n',
-            choices: ['Add Engineer', 'Add Intern', 'Done'],
-        }]
-    )
-    .then(answers){
-        if (answers.action === 'Done') {
-            return addTeam = false
-        }
-        else {
-            const response = await inquirer.prompt(memberQuestions)
+    const response = await inquirer.prompt(memberQuestions)
 
-            switch (answers.action) {
-                case 'Add Engineer':
-                    team.push(new Engineer(response.name, id, response.email, response.github))
-                    break
-                case 'Add Intern':
-                    team.push(new Intern(response.name, id, response.email, response.school))
-                    break
-            }
+    if (response.action === 'Done') {
+        return addTeam = false
+    } else {
+        switch (response.action) {
+        case 'Add Engineer':
+            team.push(new Engineer(response.name, id, response.email, response.github))
+            console.log(`Successfully added engineer ${response.name} to the team!`)
+            break
+        case 'Add Intern':
+            team.push(new Intern(response.name, id, response.email, response.school))
+            console.log(`Successfully added intern ${response.name} to the team!`)
+            break
         }
     }
 }
 
+// to run the the main function app
 mainApp()
