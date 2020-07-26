@@ -1,0 +1,43 @@
+.card {
+    margin: 1rem;
+    width: 30%;
+    min-width: 320px;
+}
+
+.jumbotron {
+    
+    background-color: #250525;
+    border-bottom: solid #bf0000 5px;
+}
+
+body {
+    background-color: #202020;
+}
+
+.card-header {
+    color: rgb(210, 210, 210);
+    background-color: #101010;
+}
+
+.card-body {
+    color: rgb(210, 210, 210);
+    background-color: #303030;
+}
+
+.list-group-item {
+    color: #fff;
+    background-color: #303030;
+}
+
+h1 {
+    color: rgb(224, 219, 219);
+    font-family: 'Passion One', cursive;
+}
+
+h4 {
+    position: absolute;
+    right: 20px;
+    top: 65px;
+    font-size: 2rem;
+    font-family: 'Passion One', cursive;
+}

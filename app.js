@@ -73,7 +73,7 @@ const memberQuestions = [
         name: 'action',
         type: 'list',
         message: 'What would you like to do?\n',
-        choices: ['Add Engineer', 'Add Intern', 'Done'],
+        choices: ['Add Engineer', 'Add Intern', 'Done']
     },
     {
         name: 'name',
@@ -100,6 +100,7 @@ const memberQuestions = [
         when: answers => answers.action === 'Add Intern'
     }
 ]
+
 // main function of the app
 async function mainApp() {
     // add manager first
@@ -114,7 +115,7 @@ async function mainApp() {
     } while (addTeam === true)
 
     // test console log
-    console.log(team)
+    // console.log(team)
 
     //render team html
     const html = render(team)
